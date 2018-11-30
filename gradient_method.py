@@ -2,10 +2,13 @@
 from support import *
 import numpy as np
 
-def algo(gfunc, x0, coef = lambda k : 1/k**2, N = 100):
+def algo(gfunc, x0, N = 100, coef = lambda k : 1/k):
 	x= np.array(x0)
 	for k in range(1,N+1):
-		x = x - coef(k) * gfunc(x)
+		grad = gfunc(x)
+		if norm_vector2(grad) < 0.0001:
+			break
+		x = x - coef(k) * grad
 
 	return x
 
@@ -27,4 +30,4 @@ def tester():
 	x = algo(grad(func3, 2), x0=[1,1], coef=lambda k : 1/L3,N= 100)
 	print(x, func3(x))
 
-tester()
+# tester()

@@ -2,14 +2,18 @@
 from support import *
 import numpy as np
 
-def algo(gfunc, x0, L, N):
+def algo(gfunc, x0, coef=lambda n: 1/n, N=100):
 	x = np.array(x0)
 	x_ = x
 	y = x
 	l, l_ = 0, 0
 	for k in range(1,N+1):
 		x_ = x
-		x = y - 1/L *gfunc(y)
+		grad = gfunc(y)
+		if norm_vector2(grad) < 0.0001:
+			break
+			
+		x = y - coef(k) * grad
 		l_ = l
 		l = 1/2 *(1 + sqrt(1 + 4*l_**2))
 		y = x + (l_ - 1)/l * (x - x_)
