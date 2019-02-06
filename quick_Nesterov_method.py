@@ -19,8 +19,7 @@ def algo(gfunc, x0, coef=lambda n: 1/n, N=100):
 		y = x + (l_ - 1)/l * (x - x_)
 	
 	return x
-
-
+	
 def tester():
 	func1 = lambda x : (x - 2)**2
 	L1 = 2
@@ -31,8 +30,6 @@ def tester():
 	
 	x = algo(grad(func1, 1), x0=1, L=L1, N=1)
 	print(x, func1(x))
-
-	# if coef is different -- we might have some troubles
 	x = algo(grad(func2, 1), x0=1, L=L2, N=1)
 	print(x, func2(x))
 	x = algo(grad(func3, 2), x0=[1,1], L=L3, N=1)

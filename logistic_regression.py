@@ -17,11 +17,11 @@ import adam
 from support import *
 import time
 
-dimX = 28*28
+dimX = 28*28 + 1
 L = 0.5 # 1/(k)
-mu = 0.1
-N_algo = 300
-N_train = 3000
+mu = 0.0001
+N_algo = 3000
+N_train = 1000
 
 def error_func(x, y, w):
 	return np.log(1 + np.exp(-y * np.dot(x, w)))
@@ -64,7 +64,7 @@ def train(method_name):
 	w = []
 	train_set_matrix = mnist.train_images()
 	train_set = [train_set_matrix[i].flatten() for i in range(N_train)]
-	# train_set = [np.append(train_set_matrix[i].flatten(), 1) for i in range(N_train)]
+	train_set = [np.append(train_set_matrix[i].flatten(), 1) for i in range(N_train)]
 	# train_set = [train_set[i]/np.max(train_set[i]) for i in range(N_train)]
 
 	label_set = mnist.train_labels()
@@ -82,7 +82,9 @@ def train(method_name):
 
 	for i in range(10):
 		print(i)
-		grad_error_E_train = partial(grad_w_error_E, train_set, label_set_num[i])
+		# grad_error_E_train = partial(grad_w_error_E, train_set, label_set_num[i])
+		grad_error_E_train = lambda w : grad_w_error_E(train_set, label_set_num[i], w) + mu*w
+
 		if method_name == 'quick_Nesterov_method':
 			w.append(quick_Nesterov_method.algo(grad_error_E_train, w0 , N=N_algo, coef=lambda k: .5))
 		elif method_name == 'gradient_method':
@@ -106,7 +108,7 @@ def play(method_name, takes_time):
 
 	test_set_matrix = mnist.test_images()
 	test_set = [test_set_matrix[i].flatten() for i in range(len(test_set_matrix))]
-	# test_set = [np.append(test_set_matrix[i].flatten(), 1) for i in range(len(test_set_matrix))]
+	test_set = [np.append(test_set_matrix[i].flatten(), 1) for i in range(len(test_set_matrix))]
 	# test_set = [test_set[i]/np.max(test_set[i]) for i in range(len(test_set))]
 	# for i in range(len(test_set)):
 		# test_set[i] = np.insert(test_set[i], 0, 1)
@@ -129,29 +131,29 @@ def play(method_name, takes_time):
 
 
 if __name__ == '__main__':
-	# method_name = 'quick_Nesterov_method'
-	# start_time = time.time()  
-	# train(method_name)
-	# takes_time = time.time() - start_time
-	# play(method_name, takes_time)
+	method_name = 'quick_Nesterov_method'
+	start_time = time.time()  
+	train(method_name)
+	takes_time = time.time() - start_time
+	play(method_name, takes_time)
 
-	# method_name = 'gradient_method'
-	# start_time = time.time()  
-	# train(method_name)
-	# takes_time = time.time() - start_time
-	# play(method_name, takes_time)
+	method_name = 'gradient_method'
+	start_time = time.time()  
+	train(method_name)
+	takes_time = time.time() - start_time
+	play(method_name, takes_time)
 
-	# method_name = 'gradient_method_strongly_convex'
-	# start_time = time.time()  
-	# train(method_name)
-	# takes_time = time.time() - start_time
-	# play(method_name, takes_time)
+	method_name = 'gradient_method_strongly_convex'
+	start_time = time.time()  
+	train(method_name)
+	takes_time = time.time() - start_time
+	play(method_name, takes_time)
 
-	# method_name = 'adadelta'
-	# start_time = time.time()  
-	# train(method_name)
-	# takes_time = time.time() - start_time
-	# play(method_name, takes_time)
+	method_name = 'adadelta'
+	start_time = time.time()  
+	train(method_name)
+	takes_time = time.time() - start_time
+	play(method_name, takes_time)
 
 	method_name = 'adam'
 	start_time = time.time()  

@@ -17,11 +17,6 @@ def algo(gfunc, x0, coef_L, N=100, alpha=0.5, N_av_forget=200):
 			break
 
 		av_grad = av_n/(av_n + 1)*av_grad + grad/(av_n+1)
-		# av_n += 1
-		# if av_n > N_av_forget:
-			# av_grad = av_grad - 1/av_n * av_grad_tail
-			# av_grad_tail = av_grad
-			# av_n -= 1
 			
 		G = alpha*G + (1 - alpha)*grad**2
 		temp = np.sqrt(G + eps)
